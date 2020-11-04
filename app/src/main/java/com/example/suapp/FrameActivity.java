@@ -27,21 +27,6 @@ public class FrameActivity extends AppCompatActivity {
     private FirstFragment firstFragment=new FirstFragment();
     private SecondFragment secondFragment=new SecondFragment();
     private ThirdFragment thirdFragment=new ThirdFragment();
-    public static ArrayList<String> selectedPhotos = new ArrayList<>();
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        List<String> photos=null;
-        if(requestCode==RESULT_OK&&requestCode==REQUEST_CODE){
-            if(data!=null){
-                photos=data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
-            }
-            Intent startA=new Intent(getApplicationContext(),PhotoPickerActivity.class);
-            startA.putStringArrayListExtra("photos",selectedPhotos);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +35,6 @@ public class FrameActivity extends AppCompatActivity {
         bottomNavigationView=findViewById(R.id.bottom_navigation_view);
         final FragmentTransaction transaction=fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment1,firstFragment).commitAllowingStateLoss();
-        YPhotoPickerIntent intent=new YPhotoPickerIntent(this);
-        intent.setMaxSelectCount(1);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
