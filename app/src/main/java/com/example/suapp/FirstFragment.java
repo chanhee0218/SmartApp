@@ -1,11 +1,14 @@
 package com.example.suapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -26,7 +29,9 @@ import static android.app.Activity.RESULT_OK;
 public class FirstFragment extends Fragment {
     private static final int REQUEST_CODE=0;
     ImageView imageView;
-    Button button;
+    MediaPlayer mediaPlayer;
+
+    Button button,ttsbtn;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -67,6 +72,22 @@ public class FirstFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_first, container, false);
         button=view.findViewById(R.id.button_fra);
         imageView=view.findViewById(R.id.img_fra1);
+        ttsbtn=view.findViewById(R.id.tts);
+        ttsbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context=v.getContext();
+                mediaPlayer=MediaPlayer.create(context,R.raw.extts);
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.stop();
+                        mp.release();
+                    }
+                });
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
