@@ -44,6 +44,13 @@ public class SecondFragment extends Fragment {
                 Context context=v.getContext();
                 player = MediaPlayer.create(context, R.raw.noticedownload);
                 player.start();
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.stop();
+                        mp.release();
+                    }
+                });
             }
         });
         return view;

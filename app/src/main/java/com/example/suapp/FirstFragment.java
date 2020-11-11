@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy.Builder;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import java.io.InputStream;
 import java.util.zip.Inflater;
 
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -37,9 +39,10 @@ import static android.app.Activity.RESULT_OK;
 public class FirstFragment extends Fragment {
     private static final int REQUEST_CODE=0;
     ImageView imageView;
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer,imgnul;
     Bitmap bitmap,sendbit;
     Button button,imgsendbtn;
+    Uri path;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -60,6 +63,8 @@ public class FirstFragment extends Fragment {
                     bitmap= BitmapFactory.decodeStream(inputStream);
                     inputStream.close();
                     imageView.setImageBitmap(bitmap);
+
+
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -98,19 +103,37 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Context context=v.getContext();
-                mediaPlayer=MediaPlayer.create(context,R.raw.uploadtts);
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mp.stop();
-                        mp.release();
-                    }
-                });
+                if(bitmap==null){
+                    Context context=v.getContext();
+                    imgnul=MediaPlayer.create(context,R.raw.notfoundimg);
+                    imgnul.start();
+
+                }else{
+                    uploadImage();
+                    Context context=v.getContext();
+                    mediaPlayer=MediaPlayer.create(context,R.raw.uploadtts);
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.stop();
+                            mp.release();
+                        }
+                    });
+                }
             }
         });
+
         return view;
+
+    }
+
+    private void uploadImage() {
+        ByteArrayOutputStream arrayOutputStream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,75,arrayOutputStream);
+        byte[] imageInByte=arrayOutputStream.toByteArray();
+        String encodedImage=Base64.encodeToString(imageInByte,Base64.DEFAULT);
+        Toast.makeText(getActivity(), encodedImage, Toast.LENGTH_SHORT).show();
 
     }
 }
