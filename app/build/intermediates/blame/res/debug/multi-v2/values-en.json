@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-en\\values-en.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\5144e\\.gradle\\caches\\transforms-2\\files-2.1\\6d8e9e1b653d2e8a69c5fee190949488\\jetified-Android-Y-PhotoPicker-1.0.0\\res\\values-en\\values-en.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,111,163,231,287,374,426,500,554,613,677,751,839,893",
+                        "endColumns": "55,51,67,55,86,51,73,53,58,63,73,87,53,49",
+                        "endOffsets": "106,158,226,282,369,421,495,549,608,672,746,834,888,938"
+                    }
+                }
+            ]
+        }
+    ]
+}
