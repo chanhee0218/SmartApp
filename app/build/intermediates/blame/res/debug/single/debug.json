@@ -4,12 +4,12 @@
         "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\drawable\\secondgradation.xml"
     },
     {
-        "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\raw_uploadtts.mp3.flat",
-        "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\raw\\uploadtts.mp3"
-    },
-    {
         "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_splash.xml.flat",
         "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\raw_uploadtts.mp3.flat",
+        "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\raw\\uploadtts.mp3"
     },
     {
         "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",
@@ -24,12 +24,12 @@
         "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
-    },
-    {
         "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
         "merged": "C:\\Users\\5144e\\AndroidStudioProjects\\SuApp\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu.xml.flat",

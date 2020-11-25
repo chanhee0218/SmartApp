@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy.Builder;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,21 +29,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.util.Objects;
 import java.util.zip.Inflater;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class FirstFragment extends Fragment {
-    private static final int REQUEST_CODE=0;
+    private static final int REQUEST_CODE=21;
     ImageView imageView;
-    MediaPlayer mediaPlayer,imgnul;
-    Bitmap bitmap,sendbit;
+    MediaPlayer mediaPlayer,imgnul,networkfail;
+    Bitmap bitmap,otherbitmap;
     Button button,imgsendbtn;
     Uri path;
+
 
     public FirstFragment() {
         // Required empty public constructor
@@ -56,26 +62,18 @@ public class FirstFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if(requestCode==REQUEST_CODE){
-            if(resultCode==RESULT_OK){
-                try{
-                    InputStream inputStream=getActivity().getContentResolver().openInputStream(data.getData());
-                    bitmap= BitmapFactory.decodeStream(inputStream);
-                    inputStream.close();
-                    imageView.setImageBitmap(bitmap);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(getActivity()).getContentResolver(), uri);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
 
-
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
-            else if(resultCode==RESULT_CANCELED){
-                Toast.makeText(getActivity(), "이미지 선택 취소", Toast.LENGTH_SHORT).show();
-            }
-
+        }
+        else if(resultCode == RESULT_CANCELED) {
+            Toast.makeText(getActivity(), "이미지 선택 취소", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -83,7 +81,6 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         View view=inflater.inflate(R.layout.fragment_first, container, false);
         imgsendbtn=view.findViewById(R.id.upload);
@@ -129,11 +126,28 @@ public class FirstFragment extends Fragment {
     }
 
     private void uploadImage() {
-        ByteArrayOutputStream arrayOutputStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,75,arrayOutputStream);
-        byte[] imageInByte=arrayOutputStream.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,75,byteArrayOutputStream);
+        byte[] imageInByte=byteArrayOutputStream.toByteArray();
         String encodedImage=Base64.encodeToString(imageInByte,Base64.DEFAULT);
-        Toast.makeText(getActivity(), encodedImage, Toast.LENGTH_SHORT).show();
+        Call<ResponsePojo> call=RetroClient.getInstance().getApi().uploadImage(encodedImage);
+        call.enqueue(new Callback<ResponsePojo>() {
+            @Override
+            public void onResponse(Call<ResponsePojo> call, Response<ResponsePojo> response) {
+                Toast.makeText(getActivity(), response.body().getRemarks(), Toast.LENGTH_SHORT).show();
+                if(response.body().isStatus()){
+
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponsePojo> call, Throwable t) {
+                Toast.makeText(getActivity(), "NetWorkFailed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 }

@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 
 import java.io.File;
 
+import retrofit2.Call;
+
 public class SecondFragment extends Fragment {
     private ProgressBar progressBar;
     static final int PERMISSION_REQUEST_CODE=1;
@@ -51,6 +53,7 @@ public class SecondFragment extends Fragment {
                         mp.release();
                     }
                 });
+
             }
         });
         return view;
