@@ -8,7 +8,7 @@
     </style>
     
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground" > @drawable/dplash</item>
+        <item name="android:windowBackground" > @drawable/ic_baseline_emoji_emotions_24</item>
     </style>
        
 

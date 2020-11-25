@@ -1652,10 +1652,10 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
-drawable dplash
 drawable gradiation
 drawable ic_back
 drawable ic_baseline_cloud_download_24
+drawable ic_baseline_emoji_emotions_24
 drawable ic_baseline_home_24
 drawable ic_camera
 drawable ic_camera_black_48dp
