@@ -32,6 +32,8 @@ import java.util.zip.Inflater;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -129,11 +131,26 @@ public class FirstFragment extends Fragment {
     }
 
     private void uploadImage() {
-        ByteArrayOutputStream arrayOutputStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,75,arrayOutputStream);
-        byte[] imageInByte=arrayOutputStream.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,75,byteArrayOutputStream);
+        byte[] imageInByte=byteArrayOutputStream.toByteArray();
         String encodedImage=Base64.encodeToString(imageInByte,Base64.DEFAULT);
-        Toast.makeText(getActivity(), encodedImage, Toast.LENGTH_SHORT).show();
+        Call<ResponsePojo> call=RetroClient.getInstance().getApi().uploadImage(encodedImage);
+        call.enqueue(new Callback<ResponsePojo>() {
+            @Override
+            public void onResponse(Call<ResponsePojo> call, Response<ResponsePojo> response) {
+                Toast.makeText(getActivity(), response.body().getRemarks(), Toast.LENGTH_SHORT).show();
+                if(response.body().isStatus()){
 
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponsePojo> call, Throwable t) {
+                Toast.makeText(getActivity(), "NetWorkFailed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
