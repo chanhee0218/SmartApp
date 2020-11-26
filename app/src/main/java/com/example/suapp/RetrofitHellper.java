@@ -4,7 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface RetrofitHellper {
-    final String Base_URL="http://3.35.16.85:20000/";
+    final String Base_URL="http://20.55.17.29:5000/getImage/";
     @GET("/")
     Call<String> Auth();
 }

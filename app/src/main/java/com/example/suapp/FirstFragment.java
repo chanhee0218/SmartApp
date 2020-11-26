@@ -26,14 +26,18 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.zip.Inflater;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.os.Environment;
+
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -44,7 +48,8 @@ public class FirstFragment extends Fragment {
     MediaPlayer mediaPlayer,imgnul;
     Bitmap bitmap,sendbit;
     Button button,imgsendbtn;
-    Uri path;
+    String path=Environment.getExternalStorageDirectory().getAbsolutePath()+"/text.mp4";
+    String url="http://036b942dadd7.ngrok.io/";
 
     public FirstFragment() {
         // Required empty public constructor
@@ -135,20 +140,39 @@ public class FirstFragment extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.JPEG,75,byteArrayOutputStream);
         byte[] imageInByte=byteArrayOutputStream.toByteArray();
         String encodedImage=Base64.encodeToString(imageInByte,Base64.DEFAULT);
-        Call<ResponsePojo> call=RetroClient.getInstance().getApi().uploadImage(encodedImage);
-        call.enqueue(new Callback<ResponsePojo>() {
+
+        RetroClient retroClient=new RetroClient(url);
+        Call<String> call=retroClient.getApi().uploadImage(encodedImage);
+
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ResponsePojo> call, Response<ResponsePojo> response) {
-                Toast.makeText(getActivity(), response.body().getRemarks(), Toast.LENGTH_SHORT).show();
-                if(response.body().isStatus()){
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(getActivity(), "succes", Toast.LENGTH_SHORT).show();
+                System.out.println(response);
+                byte[] video= java.util.Base64.getDecoder().decode(response.body());
+                System.out.println(Arrays.toString(video));
+                System.out.println(video.length);
 
-                }else{
 
+                File file = new File(path);
+
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+                    fileOutputStream.write(video);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
+
             }
 
             @Override
-            public void onFailure(Call<ResponsePojo> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println(t);
                 Toast.makeText(getActivity(), "NetWorkFailed", Toast.LENGTH_SHORT).show();
             }
         });

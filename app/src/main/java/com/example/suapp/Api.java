@@ -8,8 +8,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface Api {
-    @GET("/getImage")
-    Call<ResponsePojo> uploadImage(
+    @GET("/")
+    Call<String> uploadImage(
             @Query("img") String encodeImage
     );
 }

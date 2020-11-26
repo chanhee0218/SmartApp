@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class getRetrofit {
     public Retrofit getRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl("http://218.144.188.3/")
+                .baseUrl("http://20.55.17.29:5000/getImage/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

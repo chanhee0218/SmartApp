@@ -66,7 +66,7 @@ public class SecondFragment extends Fragment {
 
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        //ㅋ ㅃ
+
                         byte[] video= java.util.Base64.getDecoder().decode(response.body());
                         System.out.println(Arrays.toString(video));
                         System.out.println(video.length);
@@ -97,7 +97,7 @@ public class SecondFragment extends Fragment {
     Retrofit getRetrofit(){
         Gson gson=new GsonBuilder().setLenient().create();
         return new Retrofit.Builder()
-                .baseUrl("http://3.35.16.85:20000/")
+                .baseUrl("http://20.55.17.29:5000/getImage/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
