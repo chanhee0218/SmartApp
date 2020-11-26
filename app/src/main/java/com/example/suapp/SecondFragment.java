@@ -1,5 +1,7 @@
 package com.example.suapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,11 +35,19 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class SecondFragment extends Fragment {
     Button stopbtn,runbtn,retrobtn;
     VideoView videoView;
+    String path=Environment.getExternalStorageDirectory().getAbsolutePath()+"/scon/video.mp4";
+    final static AdminActivity adminactivity=new AdminActivity();
+    static String value=adminactivity.value;
+
+    RetroHelper retroHelper;
 
     public SecondFragment() {
         // Required empty public constructor
     }
 
+    public static SecondFragment newInstance() {
+        return new SecondFragment();
+    }
 
 
     @Override
@@ -50,63 +60,30 @@ public class SecondFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_second, container, false);
         stopbtn = view.findViewById(R.id.stop);
-        runbtn = view.findViewById(R.id.start);
-        retrobtn = view.findViewById(R.id.retrobtn);
+        runbtn = view.findViewById(R.id.run);
         videoView = view.findViewById(R.id.videoview);
-        retrobtn.setOnClickListener(new View.OnClickListener() {
+        videoView.setVideoPath(path);
+        playVideo();
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("test", Context.MODE_PRIVATE);
+        String easy = sharedPreferences.getString("inputText","");
+
+        RetroHelper.getInstance(easy);
+        stopbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Retrofit retrofit = getRetrofit();
-                RetrofitHellper retrofitHellper = retrofit.create(RetrofitHellper.class);
-                retrofitHellper.Auth().enqueue(new Callback<String>() {
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        System.out.println((t.toString()));
-                    }
-
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                        byte[] video= java.util.Base64.getDecoder().decode(response.body());
-                        System.out.println(Arrays.toString(video));
-                        System.out.println(video.length);
-                        File root = Environment.getExternalStorageDirectory();
-                        String path = root.getAbsolutePath() + "/test.mp4";
-                        System.out.println(path);
-                        File file = new File(path);
-
-                        try {
-                            FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-                            fileOutputStream.write(video);
-                            fileOutputStream.flush();
-                            fileOutputStream.close();
-                            videoView.setVideoPath(path);
-                            playVideo();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
+                stopVideo();
+            }
+        });
+        runbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playVideo();
             }
         });
         return view;
     }
-    Retrofit getRetrofit(){
-        Gson gson=new GsonBuilder().setLenient().create();
-        return new Retrofit.Builder()
-                .baseUrl("http://20.55.17.29:5000/getImage/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-    }
-    public void StartButton(View v){
-        playVideo();
-    }
-    public void StopButton(View v){
-        stopVideo();
-    }
+
 
     private void stopVideo() {
         videoView.pause();

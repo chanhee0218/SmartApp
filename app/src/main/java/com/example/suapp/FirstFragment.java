@@ -2,6 +2,7 @@ package com.example.suapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,7 @@ import android.os.Environment;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 public class FirstFragment extends Fragment {
     private static final int REQUEST_CODE=0;
@@ -48,12 +50,17 @@ public class FirstFragment extends Fragment {
     MediaPlayer mediaPlayer,imgnul;
     Bitmap bitmap,sendbit;
     Button button,imgsendbtn;
-    String path=Environment.getExternalStorageDirectory().getAbsolutePath()+"/text.mp4";
-    String url="http://036b942dadd7.ngrok.io/";
+    String path=Environment.getExternalStorageDirectory().getAbsolutePath()+"/scon/video.mp4";
+
 
     public FirstFragment() {
         // Required empty public constructor
     }
+
+    public static FirstFragment newInstance() {
+        return new FirstFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,31 +147,46 @@ public class FirstFragment extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.JPEG,75,byteArrayOutputStream);
         byte[] imageInByte=byteArrayOutputStream.toByteArray();
         String encodedImage=Base64.encodeToString(imageInByte,Base64.DEFAULT);
+        SharedPreferences sharedPreferences= this.getActivity().getSharedPreferences("test", MODE_PRIVATE);
+        String inputText = sharedPreferences.getString("inputText","");
+        String url=inputText;
 
+        System.out.println((url));
         RetroClient retroClient=new RetroClient(url);
         Call<String> call=retroClient.getApi().uploadImage(encodedImage);
 
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(getActivity(), "succes", Toast.LENGTH_SHORT).show();
                 System.out.println(response);
-                byte[] video= java.util.Base64.getDecoder().decode(response.body());
-                System.out.println(Arrays.toString(video));
-                System.out.println(video.length);
-
-
-                File file = new File(path);
 
                 try {
+
+                    byte[] video = java.util.Base64.getDecoder().decode(response.body());
+                    File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"scon" );
+                    if(!dir.exists()){ dir.mkdirs(); }
+
+                    File file = new File(path);
+                    if (file.exists())
+                        file.delete();
                     FileOutputStream fileOutputStream = new FileOutputStream(file, true);
                     fileOutputStream.write(video);
                     fileOutputStream.flush();
                     fileOutputStream.close();
+                    ((FrameActivity)getActivity()).replaceFragment(SecondFragment.newInstance());
+
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                catch (IllegalArgumentException e){
+                    System.out.println("dasdasds");
+                    Toast.makeText(getActivity(), "서버 IP를 재설정 해주십시오", Toast.LENGTH_SHORT).show();
+                }
+                catch (NullPointerException e){
+                    Toast.makeText(getActivity(), "서버 IP를 재설정 해주십시오", Toast.LENGTH_SHORT).show();
                 }
 
 

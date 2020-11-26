@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetroClient {
-    private static final String BASE_URL="http://036b942dadd7.ngrok.io/";
+    private static  String BASE_URL="http://036b942dadd7.ngrok.io/";
     private static RetroClient myclient;
     private Retrofit retrofit;
     RetroClient(String url){
@@ -19,7 +19,7 @@ public class RetroClient {
                 .readTimeout(1200, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .build();
-
+        BASE_URL=url;
         retrofit=new Retrofit.Builder().baseUrl(url).addConverterFactory(ScalarsConverterFactory.create()).client(okHttpClient).build();
     }
     public static synchronized RetroClient getInstance(){
@@ -31,5 +31,5 @@ public class RetroClient {
     public Api getApi(){
         return retrofit.create(Api.class);
     }
-    }
+}
 
